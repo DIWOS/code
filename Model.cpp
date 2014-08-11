@@ -1,7 +1,5 @@
-#include "Model.h"
-#include <windows.h>		// Header File For Windows
 #pragma warning(disable : 4996)
-
+#include "Model.h"
 
 Model::Model(char *filename)
 {
@@ -26,9 +24,15 @@ Model::Model(char *filename)
 	FbxNode* rootNode = scene->GetRootNode();
 	this->SetModelName(filename);
 	if (rootNode) { this->GetFbxInfo(rootNode); }
-	ShowDetails();
-	RenderModel();
+
 }
+
+Model::~Model()
+{
+	cout << "\nA model has been destroyed!";
+	//glDisableClientState(GL_VERTEX_ARRAY);
+}
+
 
 void Model::ShowDetails()
 {
@@ -66,14 +70,12 @@ void Model::GetFbxInfo(FbxNode* Node)
 
 			for (int j = 0; j<numVerts; j++)
 			{
-				FbxVector4 vertex = mesh->GetControlPointAt(j);
-				vertices[numVertices].x = (float)vertex.mData[0];
-				vertices[numVertices].y = (float)vertex.mData[1];
-				vertices[numVertices++].z = (float)vertex.mData[2];
-				      cout<<"\n"<<vertices[numVertices-1].x<<" "<<vertices[numVertices-1].y<<" "<<vertices[numVertices-1].z;
+				FbxVector4 vert = mesh->GetControlPointAt(j);
+				vertices[numVertices].x = (float)vert.mData[0];
+				vertices[numVertices].y = (float)vert.mData[1];
+				vertices[numVertices++].z = (float)vert.mData[2];
+				//      cout<<"\n"<<vertices[numVertices-1].x<<" "<<vertices[numVertices-1].y<<" "<<vertices[numVertices-1].z;
 			}
-
-			
 			//================= Get Indices ====================================
 			numIndices = mesh->GetPolygonVertexCount();
 			indices = new int[numIndices];
@@ -81,7 +83,6 @@ void Model::GetFbxInfo(FbxNode* Node)
 			cout << numIndices;
 			//================= Get Normals ====================================
 
-			
 
 			FbxGeometryElementNormal* normalEl = mesh->GetElementNormal();
 			if (normalEl)
@@ -102,28 +103,23 @@ void Model::GetFbxInfo(FbxNode* Node)
 					}
 				}
 			}
+
+			this->RenderModel(vertices, normals);
 		}
 		this->GetFbxInfo(childNode);
+
 	}
 }
 
-void Model::RenderModel()
+void Model::RenderModel(vertex *vertices, float *normals)
 {
 	int i, j;
-	//glTranslatef(0.0, 0.0, -15.0);
 	for (i = 0; i<numIndices - 3; i++)
 	{
 		glBegin(GL_TRIANGLES);
 		glNormal3f(normals[i * 3 + 0], normals[i * 3 + 1], normals[i * 3 + 2]);
 		for (j = i; j <= i + 2; j++)
 			glVertex3f(vertices[indices[j]].x, vertices[indices[j]].y, vertices[indices[j]].z);
-		cout << " test the render func coordinates " << vertices[indices[j]].x << " " << vertices[indices[j]].y << " " << vertices[indices[j]].z;
 		glEnd();
 	}
-}
-
-Model::~Model()
-{
-	cout << "\nA model has been destroyed!";
-	glDisableClientState(GL_VERTEX_ARRAY);
 }

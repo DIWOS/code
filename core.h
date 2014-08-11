@@ -33,6 +33,8 @@
 
 #include "Model.h"
 
+#pragma warning(disable : 4309) //warning C4309: 'argument' : truncation of constant value
+
 //________USING________//
 using namespace std;
 
@@ -120,8 +122,7 @@ public:
 		//{
 		//	closeWind();
 		//}
-		getLogToFile();
-		//DrawGround();
+		DrawGround();
 
 	}
 
@@ -174,45 +175,36 @@ public:
 	double x, double y, double z,
 	float angleX, float angleY)
 	{
-		glTranslatef(t_a, 0.0f, t_b);
+		
 		const float height_pers = 0;
-		//DrawGround();
-		//gluLookAt(0.0, 0.0, 6.0, x - sin(angleX / 180 * PI_1), y + height_pers + (tan(angleY / 180 * PI_1)), z - cos(angleX / 180 * PI_1), 0.0, 1.0, 0.0);
-
-		gluLookAt(4.0, 4.0, 4.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
-
+		
 		GLfloat position[] = { 10.0, 0.0, 1.5, 1.0 };	 //Положение источника света (позиционированный)
-		//Model Model("");
-		Model RenderModel();
+		
 		glPushMatrix();
-			//glTranslatef(0.0,0.0,1.5);
-			glPushMatrix();
-			glEnable(GL_BLEND);		//Включение смешивания
-			//glBlendEquation(GL_FUNC_ADD);
-			glBlendEquation(GL_FUNC_SUBTRACT);
-			//glBlendEquation(GL_FUNC_REVERSE_SUBTRACT);
-			//glBlendEquation(GL_MIN);
-			//glBlendEquation(GL_MAX);	//Смешивание
-			glHint(GL_POLYGON_SMOOTH_HINT, GL_NICEST);	//Сглаживание
-			//glRotated(30, 0.0, 1.0, 0.0);
-			glLightfv(GL_LIGHT0, GL_POSITION, position);
-			//glTranslated(0.0, 0.0, 1.5);
-			glDisable(GL_LIGHTING);
-			//Model RenderModel();
-			//auxWireCube(0.1);
-			//MessageBox(NULL, (LPCWSTR)L"Glew status - err! Close!", (LPCWSTR)L"ERROR", MB_OK | MB_ICONSTOP); //if GLEW init = false 	
-			glEnable(GL_LIGHTING);
-			glPopMatrix();
-			//if (GetAsyncKeyState('W')){ t += 4; }
-			//glTranslatef(t_a, 0.0f, t_b);
-			//auxSolidSphere(0.75);
-
-			glDisable(GL_BLEND);
+		//glTranslatef(t_a, 0.0f, t_b);
+		glEnable(GL_BLEND);		//Включение смешивания
+		glBlendEquation(GL_FUNC_ADD);
+		//glBlendEquation(GL_FUNC_SUBTRACT);
+		//glBlendEquation(GL_FUNC_REVERSE_SUBTRACT);
+		//glBlendEquation(GL_MIN);
+		//glBlendEquation(GL_MAX);	//Смешивание
+		glHint(GL_POLYGON_SMOOTH_HINT, GL_NICEST);	//Сглаживание
+		glRotated(30, 0.0, 1.0, 0.0);
+		glLightfv(GL_LIGHT0, GL_POSITION, position);
+		glTranslated(0.0, 0.0, 1.5);
+		glDisable(GL_LIGHTING);
+		auxWireCube(0.1);
+		//MessageBox(NULL, (LPCWSTR)L"Glew status - err! Close!", (LPCWSTR)L"ERROR", MB_OK | MB_ICONSTOP); //if GLEW init = false 	
+		glEnable(GL_LIGHTING);
 		glPopMatrix();
 
-		//if ( GLUT_LEFT_BUTTON)
-		//		spin = spin + 10;
-		//glutMouseFunc(mouse);
+		glTranslatef(t_a, 0.0f, t_b);
+		glPushMatrix();	
+
+		gluLookAt(1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
+			auxSolidSphere(0.75);
+			glDisable(GL_BLEND);
+		glPopMatrix();
 	}
 
 
@@ -255,42 +247,5 @@ private:
 		}
 
 		glEnd();
-	}
-
-
-	//int closeWind()
-	//{
-	//	return 1;							// Exit The Program
-	//}
-
-
-
-	//void subdivide(float *v1, float *v2, float *v3, long depth)
-	//{
-
-	//}
-
-
-	////Нормализатор
-	//void normalize(float v[3])
-	//{
-
-	//}
-
-	int stateWind()
-	{
-
-	}
-
-	void getLogToFile(void)
-	{
-		//GLint buffs, multisamp;
-		//glGetIntegerv(GL_SAMPLE_BUFFERS, &buffs);
-		//glGetIntegerv(GL_SAMPLES, &multisamp);
-		//FILE * pFile;
-		//pFile = fopen("diwos_log.log", "w");
-		//fprintf(pFile, "\n buffers_state = ", &buffs);
-		//fprintf(pFile, "\n multisampling_state = ", &multisamp, "\n");
-		//fclose(pFile);
 	}
 };

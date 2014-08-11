@@ -8,7 +8,7 @@
 #include "core.h"
 
 #include <glew.h>
-#include <gl\glaux.h>			// Header File For The Glaux Library
+//#include <gl\glaux.h>			// Header File For The Glaux Library
 #include <iostream>
 
 
@@ -259,7 +259,7 @@ int main(int argc, char *argv[]){
 
 		//gluLookAt(0.0, 0.0, 6.0, x - sin(angleX / 180 * PI), y + height_pers + (tan(angleY / 180 * PI)), z - cos(angleX / 180 * PI), 0.0, 0.0, 0.0);
 
-		gluPerspective(180.0f, (GLfloat)width / (GLfloat)height, 0.1f, 1000.0f); //GLU prspective
+		gluPerspective(60.0f, (GLfloat)width / (GLfloat)height, 0.1f, 1000.0f); //GLU prspective
 
 		glFlush();
 
@@ -270,13 +270,3 @@ int main(int argc, char *argv[]){
 	return 0;
 }
 
-
-
-	//x += (float)sin(angleX / 180 * PI) * Player.speed;
-	//z += (float)cos(angleX / 180 * PI) * Player.speed;
-
-	//x += (float)sin((angleX + 90) / 180 * PI) * Player.speed;
-	//z += (float)cos((angleX + 90) / 180 * PI) * Player.speed;
-
-	//x += (float)sin((angleX - 90) / 180 * PI) * Player.speed;
-	//z += (float)cos((angleX - 90) / 180 * PI) * Player.speed;

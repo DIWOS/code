@@ -24,12 +24,12 @@ public:
 	char* GetModelName();
 	void  SetModelName(char*);
 	void  GetFbxInfo(FbxNode*);
-	void  RenderModel();
+	void  RenderModel(vertex*, float*);
 
 
 private:
 
-	char Name[180];
+	char Name[25];
 
 	vertex vertices[MAX_VERTICES];
 	texturecoords txt[MAX_VERTICES];
