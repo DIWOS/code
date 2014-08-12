@@ -2,7 +2,7 @@
 #define MODEL_H
 #define FBXSDK_NEW_API
 
-#define MAX_VERTICES 20000
+#define MAX_VERTICES 30000
 
 #include "3dModelBasicStructs.h"
 
