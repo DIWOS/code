@@ -91,7 +91,7 @@ void Model::GetFbxInfo(FbxNode* Node)
 			numIndices = mesh->GetPolygonVertexCount();
 			indices = new int[numIndices];
 			indices = mesh->GetPolygonVertices();
-			cout << "\n numIndises: " << numIndices;
+
 			//================= Get Normals ====================================
 			FbxGeometryElementNormal* normalEl = mesh->GetElementNormal();
 			if (normalEl)
@@ -109,10 +109,11 @@ void Model::GetFbxInfo(FbxNode* Node)
 						normals[vertexCounter * 3 + 0] = normal[0];
 						normals[vertexCounter * 3 + 1] = normal[1];
 						normals[vertexCounter * 3 + 2] = normal[2];
-						//cout << "\n" << normals[vertexCounter * 3 + 0] << " " << normals[vertexCounter * 3 + 1] << " " << normals[vertexCounter * 3 + 2];
+						cout << "\n" << normals[vertexCounter * 3 + 0] << " " << normals[vertexCounter * 3 + 1] << " " << normals[vertexCounter * 3 + 2];
 						vertexCounter++;
+						cout << "\n numIndises: " << numIndices;
 						if (vertices != NULL && normals != NULL)
-							this->RenderModel(vertices, normals);
+							RenderModel(vertices, normals, *indices);
 					}
 				}
 			}
@@ -123,16 +124,28 @@ void Model::GetFbxInfo(FbxNode* Node)
 	}
 }
 
-// Write the model vertex and vectors to screen
-void Model::RenderModel(vertex *vertices, float *normals)
+// Write the model vertex and vectors to screen // ›“Œ ®¡¿Õ€…  Œƒ.((( 
+void Model::RenderModel(vertex *vertices, float *normals, GLsizei indices)
 {
-	int i, j;
-	for (i = 0; i<numIndices - 3; i++)
-	{
-		glBegin(GL_TRIANGLES);
-		glNormal3f(normals[i * 3 + 0], normals[i * 3 + 1], normals[i * 3 + 2]);
-		for (j = i; j <= i + 2; j++)
-			glVertex3f(vertices[indices[j]].x, vertices[indices[j]].y, vertices[indices[j]].z);
-		glEnd();
-	}
+	//int i, j;
+	//for (i = 0; i<numIndices - 3; i++)
+	//{
+		//glBegin(GL_TRIANGLES);
+		//glNormal3f(normals[i * 3 + 0], normals[i * 3 + 1], normals[i * 3 + 2]);
+		//for (j = i; j <= i + 2; j++)
+		//	glVertex3f(vertices[indices[j]].x, vertices[indices[j]].y, vertices[indices[j]].z);
+		//glEnd();
+
+	glTranslated(1.0, 0.0, -1.5);
+		glEnableClientState(GL_VERTEX_ARRAY);						
+		glEnableClientState(GL_NORMAL_ARRAY);						
+		glVertexPointer(3, GL_FLOAT, 0, vertices);				
+		glNormalPointer(GL_FLOAT, 0, normals);
+		//glDrawElements(GL_TRIANGLES, indices, GL_UNSIGNED_SHORT, vertices);
+		glDrawArrays(GL_POLYGON, 0, 4);
+
+		glDisableClientState(GL_VERTEX_ARRAY);						
+		glDisableClientState(GL_NORMAL_ARRAY);
+
+	//}
 }

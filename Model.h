@@ -24,7 +24,7 @@ public:
 	char* GetModelName();
 	void  SetModelName(char*);
 	void  GetFbxInfo(FbxNode*);
-	void  RenderModel(vertex*, float*);
+	void  RenderModel(vertex*, float*, GLsizei);
 
 
 private:
@@ -37,7 +37,7 @@ private:
 	float *normals;
 	int numNormals;
 
-	int *indices;
+	GLsizei *indices;
 	int numIndices;
 
 	int numVertices;
