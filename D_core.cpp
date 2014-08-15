@@ -27,6 +27,8 @@
 
 #include "Model.h"
 
+#include "Game.hpp"
+
 
 const float PI = 3.141592653; //Замечательно число Пи
 const float height_pers = 0; //Высота персонажа, тут нуль, дабы смещения не происходило. 

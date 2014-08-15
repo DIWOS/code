@@ -50,6 +50,9 @@ GLfloat rquad = 1.0f;
 GLdouble t_a = 0.0;
 GLdouble t_b = -10;
 
+char *name_model = "Normals.fbx";
+bool load_state = false;
+
 /*  Initialize color map and fog.  Set screen clear color
 *  to end of color ramp.
 */
@@ -191,9 +194,20 @@ public:
 		glHint(GL_POLYGON_SMOOTH_HINT, GL_NICEST);	//—глаживание
 		glRotated(30, 0.0, 1.0, 0.0);
 		glLightfv(GL_LIGHT0, GL_POSITION, position);
-		glTranslated(0.0, 0.0, 1.5);
+		glTranslated(0.0, 0.0, -1.5);
 		glDisable(GL_LIGHTING);
-		auxWireCube(0.1);
+		//auxWireCube(0.1);
+
+			Model Models(name_model);
+
+		//Game gameLoad;
+		//if (!gameLoad.Load()) {
+		//	gameLoad.Shutdown();
+		//	return;
+		//}
+		//gameLoad.Loop();
+		//gameLoad.Shutdown();
+
 		//MessageBox(NULL, (LPCWSTR)L"Glew status - err! Close!", (LPCWSTR)L"ERROR", MB_OK | MB_ICONSTOP); //if GLEW init = false 	
 		glEnable(GL_LIGHTING);
 		glPopMatrix();

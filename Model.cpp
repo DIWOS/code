@@ -1,33 +1,47 @@
 #pragma warning(disable : 4996)
 #include "Model.h"
 
+
+bool load_model_state = true;
+
+
+
 Model::Model(char *filename)
 {
-	cout << "\nA model has been built!";
+	if (!load_model_state)
+	{
+		cout << "\nA model has been built!";
 
-	numVertices = 0;
-	numIndices = 0;
+		numVertices = 0;
+		numIndices = 0;
 
-	//load manager
-	FbxManager *manager = FbxManager::Create();
+		//load manager
+		FbxManager *manager = FbxManager::Create();
 
-	//load IO from manager
-	FbxIOSettings *ioSettings = FbxIOSettings::Create(manager, IOSROOT);
-	manager->SetIOSettings(ioSettings);
+		//load IO from manager
+		FbxIOSettings *ioSettings = FbxIOSettings::Create(manager, IOSROOT);
+		manager->SetIOSettings(ioSettings);
 
-	//Load importer drom manager
-	FbxImporter *importer = FbxImporter::Create(manager, "");
-	importer->Initialize(filename, -1, manager->GetIOSettings());
+		//Load importer drom manager
+		FbxImporter *importer = FbxImporter::Create(manager, "");
+		importer->Initialize(filename, -1, manager->GetIOSettings());
 
-	//Create scene from manager
-	FbxScene *scene = FbxScene::Create(manager, "tempName");
-	importer->Import(scene);
-	importer->Destroy();
+		//Create scene from manager
+		FbxScene *scene = FbxScene::Create(manager, "tempName");
+		importer->Import(scene);
+		importer->Destroy();
 
-	//Call func for load and calculate model
-	FbxNode* rootNode = scene->GetRootNode();
-	this->SetModelName(filename);
-	if (rootNode) { this->GetFbxInfo(rootNode); }
+		//Call func for load and calculate model
+		FbxNode* rootNode = scene->GetRootNode();
+		this->SetModelName(filename);
+		if (rootNode) { this->GetFbxInfo(rootNode); }
+		load_model_state = true;
+	}
+
+	VertexBufferClass vertexBufferStart("true");
+
+	createVertex();
+	//RenderModel();
 
 }
 
@@ -66,12 +80,14 @@ void Model::GetFbxInfo(FbxNode* Node)
 	int numKids = Node->GetChildCount();
 	FbxNode *childNode = 0;
 
+	glInterleavedArrays(GL_T2F_V3F, sizeof(indices), vertices);
+
 	//for count child nodes
 	for (int i = 0; i<numKids; i++)
 	{
 		childNode = Node->GetChild(i);
 		FbxMesh *mesh = childNode->GetMesh();
-
+		
 		//if count chil mesh != 0
 		if (mesh != NULL)
 		{
@@ -85,13 +101,15 @@ void Model::GetFbxInfo(FbxNode* Node)
 				vertices[numVertices].x = (float)vert.mData[0];
 				vertices[numVertices].y = (float)vert.mData[1];
 				vertices[numVertices++].z = (float)vert.mData[2];
-				cout<<"\n"<<vertices[numVertices-1].x<<" "<<vertices[numVertices-1].y<<" "<<vertices[numVertices-1].z;
+				//cout<<"\n"<<vertices[numVertices-1].x<<" "<<vertices[numVertices-1].y<<" "<<vertices[numVertices-1].z;
 			}
+
+
 			//================= Get Indices ====================================
 			numIndices = mesh->GetPolygonVertexCount();
-			indices = new int[numIndices];
+			indices = new GLsizei [numIndices];
 			indices = mesh->GetPolygonVertices();
-
+								
 			//================= Get Normals ====================================
 			FbxGeometryElementNormal* normalEl = mesh->GetElementNormal();
 			if (normalEl)
@@ -109,14 +127,13 @@ void Model::GetFbxInfo(FbxNode* Node)
 						normals[vertexCounter * 3 + 0] = normal[0];
 						normals[vertexCounter * 3 + 1] = normal[1];
 						normals[vertexCounter * 3 + 2] = normal[2];
-						cout << "\n" << normals[vertexCounter * 3 + 0] << " " << normals[vertexCounter * 3 + 1] << " " << normals[vertexCounter * 3 + 2];
+						//cout << "\n" << normals[vertexCounter * 3 + 0] << " " << normals[vertexCounter * 3 + 1] << " " << normals[vertexCounter * 3 + 2];
 						vertexCounter++;
-						cout << "\n numIndises: " << numIndices;
-						if (vertices != NULL && normals != NULL)
-							RenderModel(vertices, normals, *indices);
+						if (vertices != NULL && normals != NULL);
 					}
 				}
 			}
+			cout << "\n numIndises: " << numIndices;
 		}
 
 		this->GetFbxInfo(childNode);
@@ -125,27 +142,73 @@ void Model::GetFbxInfo(FbxNode* Node)
 }
 
 // Write the model vertex and vectors to screen // ›“Œ ®¡¿Õ€…  Œƒ.((( 
-void Model::RenderModel(vertex *vertices, float *normals, GLsizei indices)
+void Model::RenderModel()
 {
+	glTranslated(0.0, 0.0, -8.5);
 	//int i, j;
 	//for (i = 0; i<numIndices - 3; i++)
 	//{
-		//glBegin(GL_TRIANGLES);
-		//glNormal3f(normals[i * 3 + 0], normals[i * 3 + 1], normals[i * 3 + 2]);
-		//for (j = i; j <= i + 2; j++)
-		//	glVertex3f(vertices[indices[j]].x, vertices[indices[j]].y, vertices[indices[j]].z);
-		//glEnd();
+	//	glBegin(GL_TRIANGLES);
+	//	glNormal3f(normals[i * 3 + 0], normals[i * 3 + 1], normals[i * 3 + 2]);
+	//	for (j = i; j <= i + 2; j++)
+	//		glVertex3f(vertices[indices[j]].x, vertices[indices[j]].y, vertices[indices[j]].z);
+	//	glEnd();
+	//}
 
-	glTranslated(1.0, 0.0, -1.5);
+
+	
 		glEnableClientState(GL_VERTEX_ARRAY);						
 		glEnableClientState(GL_NORMAL_ARRAY);						
 		glVertexPointer(3, GL_FLOAT, 0, vertices);				
 		glNormalPointer(GL_FLOAT, 0, normals);
-		//glDrawElements(GL_TRIANGLES, indices, GL_UNSIGNED_SHORT, vertices);
-		glDrawArrays(GL_POLYGON, 0, 4);
-
+		glDrawArrays(GL_POLYGON, 0, *indices);
+		//glDrawArrays(GL_POLYGON, 0, 4);
 		glDisableClientState(GL_VERTEX_ARRAY);						
 		glDisableClientState(GL_NORMAL_ARRAY);
 
-	//}
+	
+}
+
+void Model::createVertex()
+{
+
+	cout << "\n" << vertices[1].x;
+
+	GLfloat Vertex[4][2];
+	GLfloat Colors[4][3];
+
+
+	Vertex[0][0] = -0.9f;
+	Vertex[0][1] = -0.9f;
+	Colors[0][0] = 0.1f;
+	Colors[0][1] = 0.5f;
+	Colors[0][2] = 0.85f;
+
+	Vertex[1][0] = -0.9f;
+	Vertex[1][1] = 0.9f;
+	Colors[1][0] = 0.85f;
+	Colors[1][1] = 0.1f;
+	Colors[1][2] = 0.5f;
+
+	Vertex[2][0] = 0.9f;
+	Vertex[2][1] = 0.9f;
+	Colors[2][0] = 0.85f;
+	Colors[2][1] = 0.85f;
+	Colors[2][2] = 0.85f;
+
+	Vertex[3][0] = 0.9f;
+	Vertex[3][1] = -0.9f;
+	Colors[3][0] = 0.5f;
+	Colors[3][1] = 0.85f;
+	Colors[3][2] = 0.1f;
+
+	glTranslated(0.0, 0.0, -5.5);
+	glVertexPointer(2, GL_FLOAT, 0, Vertex);
+	glColorPointer(3, GL_FLOAT, 0, Colors);
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_COLOR_ARRAY);
+	glDrawArrays(GL_POLYGON, 0, 4);
+	glDisableClientState(GL_COLOR_ARRAY);
+	glDisableClientState(GL_VERTEX_ARRAY);
+
 }

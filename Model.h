@@ -2,13 +2,15 @@
 #define MODEL_H
 #define FBXSDK_NEW_API
 
-#define MAX_VERTICES 30000
+#define MAX_VERTICES 40000
 
 #include "3dModelBasicStructs.h"
 
 #include <fbxsdk.h>
 #include <iostream>
-#include <GL/glut.h>
+#include <glut.h>
+#include "buffer.h"
+
 using namespace std;
 
 class Model
@@ -24,8 +26,8 @@ public:
 	char* GetModelName();
 	void  SetModelName(char*);
 	void  GetFbxInfo(FbxNode*);
-	void  RenderModel(vertex*, float*, GLsizei);
-
+	void  RenderModel();
+	void createVertex();
 
 private:
 
@@ -41,7 +43,6 @@ private:
 	int numIndices;
 
 	int numVertices;
-
 
 };
 #endif
