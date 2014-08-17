@@ -32,11 +32,12 @@ Model::Model(char *filename)
 		FbxNode* rootNode = scene->GetRootNode();
 		this->SetModelName(filename);
 		if (rootNode) { this->GetFbxInfo(rootNode); }
+		Buffer();
 		load_model_state = true;
 	}
 
-	createVertex();
-	//RenderModel();
+	//createVertex();
+	RenderModel();
 
 }
 
@@ -129,9 +130,6 @@ void Model::GetFbxInfo(FbxNode* Node)
 				}
 			}
 			cout << "\n numIndises: " << numIndices;
-
-			//Init buffer object VBO
-			Buffers bufferStart(vertices);
 		}
 
 		this->GetFbxInfo(childNode);
@@ -143,22 +141,22 @@ void Model::GetFbxInfo(FbxNode* Node)
 void Model::RenderModel()
 {
 	glTranslated(0.0, 0.0, -8.5);	
-		glEnableClientState(GL_VERTEX_ARRAY);						
-		glEnableClientState(GL_NORMAL_ARRAY);						
-		glVertexPointer(3, GL_FLOAT, 0, vertices);				
-		glNormalPointer(GL_FLOAT, 0, normals);
-		glDrawArrays(GL_POLYGON, 0, *indices);
-		glDisableClientState(GL_VERTEX_ARRAY);						
-		glDisableClientState(GL_NORMAL_ARRAY);
+	// enable vertex arrays
+	glEnableClientState(GL_NORMAL_ARRAY);;
+	glEnableClientState(GL_VERTEX_ARRAY);
 
-	
+	// before draw, specify vertex arrays
+	glNormalPointer(GL_FLOAT, 0, normals);
+	glVertexPointer(3, GL_FLOAT, 0, vertices);
+
+	glDrawArrays(GL_TRIANGLES, 0, numIndices);
+
+	glDisableClientState(GL_VERTEX_ARRAY);  // disable vertex arrays
+	glDisableClientState(GL_NORMAL_ARRAY);
 }
 
 void Model::createVertex()
 {
-
-	//cout << "\n" << vertices[1].x;
-
 	GLfloat Vertex[4][2];
 	GLfloat Colors[4][3];
 
