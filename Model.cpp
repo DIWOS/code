@@ -1,10 +1,7 @@
 #pragma warning(disable : 4996)
 #include "Model.h"
 
-
-bool load_model_state = true;
-
-
+bool load_model_state = false;
 
 Model::Model(char *filename)
 {
@@ -37,8 +34,6 @@ Model::Model(char *filename)
 		if (rootNode) { this->GetFbxInfo(rootNode); }
 		load_model_state = true;
 	}
-
-	VertexBufferClass vertexBufferStart("true");
 
 	createVertex();
 	//RenderModel();
@@ -101,7 +96,7 @@ void Model::GetFbxInfo(FbxNode* Node)
 				vertices[numVertices].x = (float)vert.mData[0];
 				vertices[numVertices].y = (float)vert.mData[1];
 				vertices[numVertices++].z = (float)vert.mData[2];
-				//cout<<"\n"<<vertices[numVertices-1].x<<" "<<vertices[numVertices-1].y<<" "<<vertices[numVertices-1].z;
+				cout<<"\n"<<vertices[numVertices-1].x<<" "<<vertices[numVertices-1].y<<" "<<vertices[numVertices-1].z;
 			}
 
 
@@ -127,13 +122,16 @@ void Model::GetFbxInfo(FbxNode* Node)
 						normals[vertexCounter * 3 + 0] = normal[0];
 						normals[vertexCounter * 3 + 1] = normal[1];
 						normals[vertexCounter * 3 + 2] = normal[2];
-						//cout << "\n" << normals[vertexCounter * 3 + 0] << " " << normals[vertexCounter * 3 + 1] << " " << normals[vertexCounter * 3 + 2];
+						cout << "\n" << normals[vertexCounter * 3 + 0] << " " << normals[vertexCounter * 3 + 1] << " " << normals[vertexCounter * 3 + 2];
 						vertexCounter++;
 						if (vertices != NULL && normals != NULL);
 					}
 				}
 			}
 			cout << "\n numIndises: " << numIndices;
+
+			//Init buffer object VBO
+			Buffers bufferStart(vertices);
 		}
 
 		this->GetFbxInfo(childNode);
@@ -144,25 +142,12 @@ void Model::GetFbxInfo(FbxNode* Node)
 // Write the model vertex and vectors to screen // ›“Œ ®¡¿Õ€…  Œƒ.((( 
 void Model::RenderModel()
 {
-	glTranslated(0.0, 0.0, -8.5);
-	//int i, j;
-	//for (i = 0; i<numIndices - 3; i++)
-	//{
-	//	glBegin(GL_TRIANGLES);
-	//	glNormal3f(normals[i * 3 + 0], normals[i * 3 + 1], normals[i * 3 + 2]);
-	//	for (j = i; j <= i + 2; j++)
-	//		glVertex3f(vertices[indices[j]].x, vertices[indices[j]].y, vertices[indices[j]].z);
-	//	glEnd();
-	//}
-
-
-	
+	glTranslated(0.0, 0.0, -8.5);	
 		glEnableClientState(GL_VERTEX_ARRAY);						
 		glEnableClientState(GL_NORMAL_ARRAY);						
 		glVertexPointer(3, GL_FLOAT, 0, vertices);				
 		glNormalPointer(GL_FLOAT, 0, normals);
 		glDrawArrays(GL_POLYGON, 0, *indices);
-		//glDrawArrays(GL_POLYGON, 0, 4);
 		glDisableClientState(GL_VERTEX_ARRAY);						
 		glDisableClientState(GL_NORMAL_ARRAY);
 
@@ -172,7 +157,7 @@ void Model::RenderModel()
 void Model::createVertex()
 {
 
-	cout << "\n" << vertices[1].x;
+	//cout << "\n" << vertices[1].x;
 
 	GLfloat Vertex[4][2];
 	GLfloat Colors[4][3];

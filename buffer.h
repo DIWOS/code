@@ -1,20 +1,19 @@
+#define GL_GLEXT_PROTOTYPES
+#include <iostream>
+#include "Model.h"
+#include <glut.h>
+#include "glext.h"
 
-//constructor
-VertexBufferClass::VertexBufferClass(char *state)
+using namespace std;
+
+class Buffers
 {
-	//initBuffer();
-	cout << "start buffers class \n" << "state: = " << state;
-}
+public:
+	//constructor
+	Buffers(vertex*);
+	float bufferInit(vertex*);
+private:
 
+	GLuint VertexVBOID;
 
-void VertexBufferClass::initBuffer()
-{
-
-}
-
-
-////Destructor
-//Vertex_buffer::~Vertex_buffer()
-//{
-//
-//}
+};

@@ -237,7 +237,7 @@ public:
 
 	void fbx_load_model()
 	{
-		Model Model("Normals.fbx");
+		//Model Model("Normals.fbx");
 	}
 
 

@@ -1,16 +1,10 @@
 ﻿#include <windows.h>		// Header File For Windows
-
 //#include <gl\gl.h>			// Header File For The OpenGL32 Library
-
 //#include <gl\glu.h>			// Header File For The GLu32 Library
 //#include <gl\glaux.h>		// Header File For The Glaux Library
-
 #include "core.h"
-
 #include <glew.h>
-//#include <gl\glaux.h>			// Header File For The Glaux Library
 #include <iostream>
-
 
 //________GLEW_________//
 #ifdef	_WIN32
@@ -26,8 +20,6 @@
 #endif
 
 #include "Model.h"
-
-#include "Game.hpp"
 
 
 const float PI = 3.141592653; //Замечательно число Пи

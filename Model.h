@@ -1,14 +1,10 @@
 #ifndef MODEL_H
 #define MODEL_H
 #define FBXSDK_NEW_API
-
 #define MAX_VERTICES 40000
-
 #include "3dModelBasicStructs.h"
-
 #include <fbxsdk.h>
 #include <iostream>
-#include <glut.h>
 #include "buffer.h"
 
 using namespace std;

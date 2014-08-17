@@ -1,32 +1,18 @@
 #include "buffer.h"
 
-#include <fbxsdk.h>
-#include <iostream>
-#include <glut.h>
 
-using namespace std;
-
-//________GLEW_________//
-#ifdef	_WIN32
-#include	<wglew.h>
-#else
-#include	<glxew.h>
-#endif
-
-
-class VertexBufferClass
+//constructor
+Buffers::Buffers(vertex *vertices)
 {
-public:
-	//constructor
-	VertexBufferClass(char*);
 
-	void initBuffer();
+		bufferInit(vertices);
 
-	//~vertex_buffer();
+}
 
-
-private:
-};
-
-
+float Buffers::bufferInit(vertex *vertices)
+{
+	glGenBuffers(1, &VertexVBOID);
+	glBindBuffer(GL_ARRAY_BUFFER, VertexVBOID);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertex)* 3, &vertices[0].x, GL_STATIC_DRAW);
+}
 
