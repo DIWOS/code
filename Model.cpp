@@ -33,11 +33,14 @@ Model::Model(char *filename)
 		this->SetModelName(filename);
 		if (rootNode) { this->GetFbxInfo(rootNode); }
 		Buffer();
+
+		ShowDetails();
 		load_model_state = true;
 	}
 
 	//createVertex();
-	RenderModel();
+	//RenderModel();
+	Buffer();
 
 }
 
@@ -52,9 +55,9 @@ Model::~Model()
 //Write in wind inf of file
 void Model::ShowDetails()
 {
-	cout << "\nName:" << Name;
-	cout << "\nVertices Number:" << numVertices;
-	cout << "\nIndices Number:" << numIndices;
+	cout << "\n\nName: " << Name;
+	cout << "\nVertices Number: " << numVertices;
+	cout << "\nIndices Number: " << numIndices;
 
 }
 
@@ -97,7 +100,7 @@ void Model::GetFbxInfo(FbxNode* Node)
 				vertices[numVertices].x = (float)vert.mData[0];
 				vertices[numVertices].y = (float)vert.mData[1];
 				vertices[numVertices++].z = (float)vert.mData[2];
-				cout<<"\n"<<vertices[numVertices-1].x<<" "<<vertices[numVertices-1].y<<" "<<vertices[numVertices-1].z;
+				//cout<<"\n"<<vertices[numVertices-1].x<<" "<<vertices[numVertices-1].y<<" "<<vertices[numVertices-1].z;
 			}
 
 
@@ -123,15 +126,13 @@ void Model::GetFbxInfo(FbxNode* Node)
 						normals[vertexCounter * 3 + 0] = normal[0];
 						normals[vertexCounter * 3 + 1] = normal[1];
 						normals[vertexCounter * 3 + 2] = normal[2];
-						cout << "\n" << normals[vertexCounter * 3 + 0] << " " << normals[vertexCounter * 3 + 1] << " " << normals[vertexCounter * 3 + 2];
+						//cout << "\n" << normals[vertexCounter * 3 + 0] << " " << normals[vertexCounter * 3 + 1] << " " << normals[vertexCounter * 3 + 2];
 						vertexCounter++;
 						if (vertices != NULL && normals != NULL);
 					}
 				}
 			}
-			cout << "\n numIndises: " << numIndices;
 		}
-
 		this->GetFbxInfo(childNode);
 
 	}
@@ -141,18 +142,13 @@ void Model::GetFbxInfo(FbxNode* Node)
 void Model::RenderModel()
 {
 	glTranslated(0.0, 0.0, -8.5);	
+
 	// enable vertex arrays
-	glEnableClientState(GL_NORMAL_ARRAY);;
 	glEnableClientState(GL_VERTEX_ARRAY);
-
-	// before draw, specify vertex arrays
-	glNormalPointer(GL_FLOAT, 0, normals);
 	glVertexPointer(3, GL_FLOAT, 0, vertices);
+	glDrawElements(GL_TRIANGLES, numIndices, GL_UNSIGNED_INT, indices);
+	glDisableClientState(GL_VERTEX_ARRAY);
 
-	glDrawArrays(GL_TRIANGLES, 0, numIndices);
-
-	glDisableClientState(GL_VERTEX_ARRAY);  // disable vertex arrays
-	glDisableClientState(GL_NORMAL_ARRAY);
 }
 
 void Model::createVertex()

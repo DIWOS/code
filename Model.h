@@ -6,13 +6,15 @@
 #include "3dModelBasicStructs.h"
 #include <fbxsdk.h>
 #include <iostream>
+#include <glew.h>
 //_________GLUT_________//
 #ifdef __APPLE__
 #include <glut.h>
 #else
 #include <glut.h>
 #endif
-#include "glext.h"
+#include <glaux.h>
+
 
 using namespace std;
 
@@ -34,29 +36,56 @@ public:
 
 	void Buffer()
 	{
-		GLuint id = 0;  
-		GLenum target = GL_ARRAY_BUFFER_ARB;
-		GLenum usage = GL_STATIC_DRAW_ARB;
+		//VERTEX 0
+		pvertex[0].x = 0.0;
+		pvertex[0].y = 0.0;
+		pvertex[0].z = 0.0;
 
-		glGenBuffersARB(1, &id); 
-		glBindBufferARB(target, id);
-		glBufferDataARB(target, numIndices, indices, usage);
+		//VERTEX 1
+		pvertex[1].x = 1.0;
+		pvertex[1].y = 0.0;
+		pvertex[1].z = 0.0;
 
-		glBufferDataARB(GL_ARRAY_BUFFER_ARB, sizeof(vertices)+sizeof(normals), 0, GL_DYNAMIC_DRAW_ARB);
+		//VERTEX 2
+		pvertex[2].x = 0.0;
+		pvertex[2].y = 1.0;
+		pvertex[2].z = 0.0;
 
-		int bufferSize = 0;
-		glGetBufferParameterivARB(target, GL_BUFFER_SIZE_ARB, &bufferSize);
-		if (numIndices != bufferSize)
-		{
-			glDeleteBuffersARB(1, &id);
-			id = 0;
-			cout << "\n [createVBO()] Data size is mismatch with input array \n BS = " << bufferSize << "\n NI = " << numIndices;
-		}
+		glGenBuffers(1, &VertexVBOID);
+		glBindBuffer(GL_ARRAY_BUFFER, VertexVBOID);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(vertex)* 3, &vertices[0].x, GL_STATIC_DRAW);
+
+		unsigned short pindices[3];
+		pindices[0] = 0;
+		pindices[1] = 1;
+		pindices[2] = 2;
+
+		glGenBuffers(1, &IndexVBOID);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IndexVBOID);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned short)* 3, pindices, GL_STATIC_DRAW);
+
+		//Define this somewhere in your header file
+		#define BUFFER_OFFSET(i) ((char *)NULL + (i))
+
+			glBindBuffer(GL_ARRAY_BUFFER, VertexVBOID);
+		glEnableVertexAttribArray(0);    
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(vertex), BUFFER_OFFSET(0));
+		glEnableVertexAttribArray(1);   
+		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(vertex), BUFFER_OFFSET(3));
+		glEnableVertexAttribArray(2);   
+		glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(vertex), BUFFER_OFFSET(6));
+
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IndexVBOID);
+		glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_SHORT, BUFFER_OFFSET(0));
+
+
 	}
 
 private:
-	GLuint vboId;                              // ID of VBO
+	GLuint IndexVBOID;
+	GLuint VertexVBOID;                              // ID of VBO
 
+	vertex pvertex[3];
 
 	char Name[25];
 
@@ -67,7 +96,7 @@ private:
 	int numNormals;
 
 	GLsizei *indices;
-	int numIndices;
+	GLsizei numIndices;
 
 	int numVertices;
 
