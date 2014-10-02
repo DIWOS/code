@@ -12,3 +12,5 @@ struct poligon
 {
 	int a, b, c;
 };
+
+

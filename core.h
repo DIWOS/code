@@ -43,7 +43,7 @@ using namespace std;
 GLdouble t_a = 0.0;
 GLdouble t_b = -10;
 
-char *name_model = "Normals.fbx";
+char *name_model = "cube.fbx";
 bool load_state = false;
 static GLint fogMode;
 static int shoulder = 0, elbow = 0;
@@ -51,25 +51,6 @@ static GLdouble spin;
 bool close;
 const float PI_1 = 3.141592653; //Замечательно число Пи
 
-/////////////////////////////////
-//
-//          OBJECT_POS
-//
-/////////////////////////////////
-
-
-/////////////////////////////////
-//
-//          LIGHT
-//
-/////////////////////////////////
-
-
-/////////////////////////////////
-//
-//          CLASS
-//
-/////////////////////////////////
 
 class CoreGraphicsObjectBind
 {
@@ -136,7 +117,7 @@ public:
 		glTranslatef(t_a, 0.0f, t_b);
 		glPushMatrix();	
 			gluLookAt(1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
-			auxSolidSphere(0.75);
+			//auxSolidSphere(0.75);
 			glDisable(GL_BLEND);
 		glPopMatrix();
 	}
@@ -153,9 +134,8 @@ private:
 		glBegin(GL_LINES);
 		for (iLine = -fExtent; iLine <= fExtent; iLine += fStep)
 		{
-			glVertex3f(iLine, y, fExtent);    // Draw Z lines
+			glVertex3f(iLine, y, fExtent);   
 			glVertex3f(iLine, y, -fExtent);
-
 			glVertex3f(fExtent, y, iLine);
 			glVertex3f(-fExtent, y, iLine);
 		}

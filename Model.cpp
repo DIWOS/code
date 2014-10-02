@@ -32,15 +32,17 @@ Model::Model(char *filename)
 		FbxNode* rootNode = scene->GetRootNode();
 		this->SetModelName(filename);
 		if (rootNode) { this->GetFbxInfo(rootNode); }
-		Buffer();
+
+		for (int num = 0; num <26; num++)
+		{
+			cout << "\n vertice " << num << " " << vertices[num].x << " " << vertices[num].y << " " << vertices[num].z;
+		}
 
 		ShowDetails();
 		load_model_state = true;
 	}
 
-	//createVertex();
-	//RenderModel();
-	Buffer();
+	createVertex();
 
 }
 
@@ -103,12 +105,11 @@ void Model::GetFbxInfo(FbxNode* Node)
 				//cout<<"\n"<<vertices[numVertices-1].x<<" "<<vertices[numVertices-1].y<<" "<<vertices[numVertices-1].z;
 			}
 
-
 			//================= Get Indices ====================================
-			numIndices = mesh->GetPolygonVertexCount();
-			indices = new GLsizei [numIndices];
-			indices = mesh->GetPolygonVertices();
-								
+
+				indices = new GLsizei[numIndices];
+				indices = mesh->GetPolygonVertices();
+						
 			//================= Get Normals ====================================
 			FbxGeometryElementNormal* normalEl = mesh->GetElementNormal();
 			if (normalEl)
@@ -138,55 +139,12 @@ void Model::GetFbxInfo(FbxNode* Node)
 	}
 }
 
-// Write the model vertex and vectors to screen // ›“Œ ®¡¿Õ€…  Œƒ.((( 
-void Model::RenderModel()
-{
-	glTranslated(0.0, 0.0, -8.5);	
-
-	// enable vertex arrays
-	glEnableClientState(GL_VERTEX_ARRAY);
-	glVertexPointer(3, GL_FLOAT, 0, vertices);
-	glDrawElements(GL_TRIANGLES, numIndices, GL_UNSIGNED_INT, indices);
-	glDisableClientState(GL_VERTEX_ARRAY);
-
-}
 
 void Model::createVertex()
 {
-	GLfloat Vertex[4][2];
-	GLfloat Colors[4][3];
-
-
-	Vertex[0][0] = -0.9f;
-	Vertex[0][1] = -0.9f;
-	Colors[0][0] = 0.1f;
-	Colors[0][1] = 0.5f;
-	Colors[0][2] = 0.85f;
-
-	Vertex[1][0] = -0.9f;
-	Vertex[1][1] = 0.9f;
-	Colors[1][0] = 0.85f;
-	Colors[1][1] = 0.1f;
-	Colors[1][2] = 0.5f;
-
-	Vertex[2][0] = 0.9f;
-	Vertex[2][1] = 0.9f;
-	Colors[2][0] = 0.85f;
-	Colors[2][1] = 0.85f;
-	Colors[2][2] = 0.85f;
-
-	Vertex[3][0] = 0.9f;
-	Vertex[3][1] = -0.9f;
-	Colors[3][0] = 0.5f;
-	Colors[3][1] = 0.85f;
-	Colors[3][2] = 0.1f;
-
-	glTranslated(0.0, 0.0, -5.5);
-	glVertexPointer(2, GL_FLOAT, 0, Vertex);
-	glColorPointer(3, GL_FLOAT, 0, Colors);
+	glVertexPointer(26, GL_FLOAT, 0, vertices);
 	glEnableClientState(GL_VERTEX_ARRAY);
-	glEnableClientState(GL_COLOR_ARRAY);
-	glDrawArrays(GL_POLYGON, 0, 4);
+	glDrawArrays(GL_POLYGON, 0, 9);
 	glDisableClientState(GL_COLOR_ARRAY);
 	glDisableClientState(GL_VERTEX_ARRAY);
 
